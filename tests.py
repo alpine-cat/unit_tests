@@ -21,7 +21,7 @@ class TestSoldiers(unittest.TestCase):
         self.assertEqual(s.hp, 0)
 
     def test_if_hp_is_str(self):
-       """Тест не должен отработать"""
+        """Тест не должен отработать"""
         s = Soldier()
         s.hp = 'i'
         self.assertEqual(s.hp, 'i')

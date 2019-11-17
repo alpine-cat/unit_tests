@@ -59,6 +59,22 @@ class TestSoldiers(unittest.TestCase):
         self.assertEqual(s2.hp, 100)
         self.assertEqual(s.xp, exp)
 
+    @patch("units.Soldier.attack_chance")
+    @patch("units.Soldier.damage")
+    def test_if_attack_chance_more_than_05(self, mock_attack_ch, mock_damage):
+        s1 = Soldier()
+        s2 = Soldier()
+        exp = s1.xp
+        mock_attack_ch, mock_damage = Mock(), Mock()
+        mock_attack_ch.return_value = 0.9
+        mock_damage.return_value = 8.5
+        s1.attack_chance = mock_attack_ch
+        s1.damage = mock_damage
+        s1.attack(s2)
+        self.assertEqual(s2.hp, 91.5)
+        self.assertNotEqual(s1.xp, exp)
+        self.assertFalse(s1.is_active)
+
 
 if __name__ is '__main__':
     unittest.main()

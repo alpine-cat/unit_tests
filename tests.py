@@ -1,6 +1,7 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from units import Soldier
+
 
 class TestSoldiers(unittest.TestCase):
     def test_if_soldier_xp_is_not_int(self):
@@ -11,7 +12,7 @@ class TestSoldiers(unittest.TestCase):
     def test_if_soldier_xp_is_more_than_50(self):
         s = Soldier()
         s.xp = 100
-        self.assertNotEqual(s.xp,100)
+        self.assertNotEqual(s.xp, 100)
         self.assertEqual(s.xp, 50)
 
     def test_if_damage_more_than_hp(self):
@@ -20,7 +21,7 @@ class TestSoldiers(unittest.TestCase):
         self.assertEqual(s.hp, 0)
 
     def test_if_hp_is_str(self):
-        """Тест не должен отработать"""
+       """Тест не должен отработать"""
         s = Soldier()
         s.hp = 'i'
         self.assertEqual(s.hp, 'i')
@@ -34,7 +35,7 @@ class TestSoldiers(unittest.TestCase):
         s1 = Soldier()
         s2 = Soldier()
         s1.attack(s2)
-        self.assertEqual(s1.xp,1)
+        self.assertEqual(s1.xp, 1)
 
     def test_attack_cooldown_is_1_soldier_not_active(self):
         s1 = Soldier()
@@ -45,6 +46,18 @@ class TestSoldiers(unittest.TestCase):
     def test_soldier_is_active(self):
         s = Soldier()
         self.assertTrue(s.is_active)
+
+    @patch("units.Soldier.attack_chance")
+    def test_if_attack_chance_less_than_05(self, mock):
+        mock = Mock()
+        mock.return_value = 0.1
+        s = Soldier()
+        s2 = Soldier()
+        s.attack_chance = mock
+        exp = s.xp
+        s.attack(s2)
+        self.assertEqual(s2.hp, 100)
+        self.assertEqual(s.xp, exp)
 
 
 if __name__ is '__main__':
